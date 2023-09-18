@@ -114,8 +114,26 @@
   */
 
 enum {
-  MACRO_VERSION_INFO,
+  MACRO_VERSION_INFO,//0
   MACRO_ANY,
+  MACRO_SPOTLIGHT_SEARCH,//2
+  MACRO_COPY,//3
+  MACRO_PASTE,//4
+  MACRO_CUT,//5
+  MACRO_MAXIMIZE, // 6 shift cmd up
+  MACRO_LEFT_HALF, // 7 shift cmd k
+  MACRO_RIGHT_HALF,// 8  shift cmd l
+  MACRO_TOP_LEFT_QUARTER,// 9 shift control cmd up
+  MACRO_BOTTOM_LEFT_QUARTER,// 10 shift control cmd left
+  MACRO_TOP_RIGHT_QUARTER,// 11 shift control cmd right
+  MACRO_BOTTOM_RIGHT_QUARTER,// 12 shift control cmd down
+  MACRO_SELECT_ALL,// 13 cmd a
+  MACRO_SAFARI_HOME,// 14 cmd shift h
+  MACRO_SELECTION_SCREENSHOT,// 15 cmd shift control 4
+  MACRO_TERM_NEXT_TAB,// 16 cmd shift ]
+  MACRO_TERM_PREV_TAB,// 17 cmd shift [
+  MACRO_SAFARI_BACK,//18 cmd [
+
 };
 
 
@@ -316,7 +334,7 @@ KEYMAPS(
 
 static void versionInfoMacro(uint8_t key_state) {
   if (keyToggledOn(key_state)) {
-    Macros.type(PSTR("Keyboardio Model 100 - Firmware version "));
+    Macros.type(PSTR("Keyboardio Model 100 - Firmware version"));
     Macros.type(PSTR(KALEIDOSCOPE_FIRMWARE_VERSION));
   }
 }
@@ -335,7 +353,6 @@ static void anyKeyMacro(KeyEvent &event) {
     event.key.setFlags(0);
   }
 }
-
 
 /** macroAction dispatches keymap events that are tied to a macro
     to that macro. It takes two uint8_t parameters.
@@ -359,6 +376,75 @@ const macro_t *macroAction(uint8_t macro_id, KeyEvent &event) {
   case MACRO_ANY:
     anyKeyMacro(event);
     break;
+
+  case MACRO_SPOTLIGHT_SEARCH:
+    return MACRO(D(LeftGui),D(Spacebar));
+    break;
+
+  case MACRO_COPY:
+    return MACRO(D(LeftGui),D(C));
+    break;
+
+  case MACRO_PASTE:
+    return MACRO(D(LeftGui),D(V));
+    break;
+
+  case MACRO_CUT:
+   return MACRO(D(LeftGui),D(X));
+   break;
+
+  case MACRO_TOP_LEFT_QUARTER:
+   return MACRO(D(LeftShift),D(LeftControl),D(LeftGui),D(UpArrow));
+   break;
+
+  case MACRO_TOP_RIGHT_QUARTER:
+    return MACRO(D(LeftShift),D(LeftControl),D(LeftGui),D(RightArrow));
+    break;
+
+  case MACRO_BOTTOM_LEFT_QUARTER:
+    return MACRO(D(LeftShift),D(LeftControl),D(LeftGui),D(LeftArrow));
+    break;
+
+  case MACRO_BOTTOM_RIGHT_QUARTER:
+    return MACRO(D(LeftShift),D(LeftControl),D(LeftGui),D(DownArrow));
+    break;
+
+  case MACRO_MAXIMIZE:
+    return MACRO(D(LeftShift),D(LeftGui),D(UpArrow));
+    break;
+
+  case MACRO_LEFT_HALF:
+    return MACRO(D(LeftShift),D(LeftGui),D(K));
+    break;
+
+  case MACRO_RIGHT_HALF:
+    return MACRO(D(LeftShift),D(LeftGui),D(L));
+    break;
+
+  case MACRO_SELECT_ALL:
+    return MACRO(D(LeftGui),D(A));
+    break;
+
+  case MACRO_SAFARI_HOME:
+    return MACRO(D(LeftGui),D(LeftShift),D(H));
+    break;
+
+  case MACRO_SELECTION_SCREENSHOT:
+    return MACRO(D(LeftGui),D(LeftShift),D(LeftControl),D(4));
+    break;
+
+  case MACRO_TERM_NEXT_TAB:
+    return MACRO(D(LeftGui),D(LeftShift),D(RightBracket));
+    break;
+
+  case MACRO_TERM_PREV_TAB:
+    return MACRO(D(LeftGui),D(LeftShift),D(LeftBracket));
+    break;
+
+  case MACRO_SAFARI_BACK:
+    return MACRO(D(LeftGui),D(LeftBracket));
+    break;
+
   }
   return MACRO_NONE;
 }
@@ -680,6 +766,10 @@ void setup() {
   // firmware starts with LED effects off. This avoids over-taxing devices that
   // don't have a lot of power to share with USB devices
   DefaultLEDModeConfig.activateLEDModeIfUnconfigured(&LEDOff);
+
+  //Adjust the timing for the mouse keys
+  MouseKeys.setCursorBaseSpeed(40);
+  MouseKeys.setCursorAccelDuration(1400);
 }
 
 /** loop is the second of the standard Arduino sketch functions.
