@@ -446,7 +446,7 @@ const macro_t *macroAction(uint8_t macro_id, KeyEvent &event) {
   case MACRO_SAFARI_BACK:
     return MACRO(D(LeftGui),D(LeftBracket));
     break;
-    
+
   case MACRO_FAKE_HYPER:
     return MACRO(D(LeftControl),D(LeftShift),D(LeftGui));
     break;
