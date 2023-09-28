@@ -124,7 +124,7 @@ enum {
   MACRO_LEFT_HALF, // 7 shift cmd k
   MACRO_RIGHT_HALF,// 8  shift cmd l
   MACRO_TOP_LEFT_QUARTER,// 9 shift control cmd up
-  MACRO_BOTTOM_LEFT_QUARTER,// 10 shift control cmd left
+  MACRO_BOTTOM_LEFT_QUARTER,// 10 shift control cmd downarrowleft
   MACRO_TOP_RIGHT_QUARTER,// 11 shift control cmd right
   MACRO_BOTTOM_RIGHT_QUARTER,// 12 shift control cmd down
   MACRO_SELECT_ALL,// 13 cmd a
@@ -769,7 +769,7 @@ void setup() {
 
   //Adjust the timing for the mouse keys
   MouseKeys.setCursorBaseSpeed(40);
-  MouseKeys.setCursorAccelDuration(1400);
+  MouseKeys.setCursorAccelDuration(2400);
 }
 
 /** loop is the second of the standard Arduino sketch functions.
