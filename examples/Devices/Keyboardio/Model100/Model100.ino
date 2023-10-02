@@ -133,6 +133,7 @@ enum {
   MACRO_TERM_NEXT_TAB,// 16 cmd shift ]
   MACRO_TERM_PREV_TAB,// 17 cmd shift [
   MACRO_SAFARI_BACK,//18 cmd [
+  MACRO_FAKE_SUPER, //19 right control '
 
 };
 
@@ -443,6 +444,10 @@ const macro_t *macroAction(uint8_t macro_id, KeyEvent &event) {
 
   case MACRO_SAFARI_BACK:
     return MACRO(D(LeftGui),D(LeftBracket));
+    break;
+    
+  case MACRO_FAKE_HYPER:
+    return MACRO(D(RIGHT_GUI),D(QUOTE));
     break;
 
   }
