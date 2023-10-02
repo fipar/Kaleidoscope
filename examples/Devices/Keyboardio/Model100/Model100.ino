@@ -448,7 +448,7 @@ const macro_t *macroAction(uint8_t macro_id, KeyEvent &event) {
     break;
     
   case MACRO_FAKE_SUPER:
-    return MACRO(D(RightGui),D(Quote));
+    return MACRO(D(RightControl),D(Quote));
     break;
 
   case MACRO_FAKE_HYPER:
