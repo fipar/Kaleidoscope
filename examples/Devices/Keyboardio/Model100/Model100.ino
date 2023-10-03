@@ -447,16 +447,12 @@ const macro_t *macroAction(uint8_t macro_id, KeyEvent &event) {
     return MACRO(D(LeftGui),D(LeftBracket));
     break;
     
-  case MACRO_FAKE_SUPER:
-    return MACRO(D(RightControl),D(LeftAlt),D(LeftShift),D(LeftGui),D(Quote));
-    break;
-
   case MACRO_FAKE_HYPER:
-    return MACRO(D(LeftControl),D(LeftShift),D(LeftGui));
+    return MACRO(D(RightControl),D(LeftAlt),D(LeftShift),D(LeftGui));
     break;
 
   case MACRO_FAKE_SUPER:
-    return MACRO(D(LeftControl),D(LeftAlt),D(LeftShift),D(LeftGui));
+    return MACRO(D(RightControl),D(LeftAlt),D(LeftShift),D(LeftGui),D(RightBracket),U(RightControl),U(LeftAlt),U(LeftGui),U(LeftGui),U(RightBracket))
       break;
 
   }
