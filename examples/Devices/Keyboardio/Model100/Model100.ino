@@ -133,7 +133,8 @@ enum {
   MACRO_TERM_NEXT_TAB,// 16 cmd shift ]
   MACRO_TERM_PREV_TAB,// 17 cmd shift [
   MACRO_SAFARI_BACK,//18 cmd [
-  MACRO_FAKE_SUPER, //19 right control '
+  MACRO_FAKE_HYPER, //19 control meta shift super
+  MACRO_FAKE_SUPER, //20 control meta shift super ]
 
 };
 
@@ -446,9 +447,13 @@ const macro_t *macroAction(uint8_t macro_id, KeyEvent &event) {
     return MACRO(D(LeftGui),D(LeftBracket));
     break;
     
-  case MACRO_FAKE_SUPER:
-    return MACRO(D(RightControl),D(LeftAlt),D(LeftShift),D(LeftGui),D(Quote));
+  case MACRO_FAKE_HYPER:
+    return MACRO(D(RightControl),D(LeftAlt),D(LeftShift),D(LeftGui));
     break;
+
+  case MACRO_FAKE_SUPER:
+    return MACRO(D(RightControl),D(LeftAlt),D(LeftShift),D(LeftGui),D(RightBracket),U(RightControl),U(LeftAlt),U(LeftGui),U(LeftGui),U(RightBracket))
+      break;
 
   }
   return MACRO_NONE;
@@ -456,6 +461,7 @@ const macro_t *macroAction(uint8_t macro_id, KeyEvent &event) {
 
 
 // These 'solid' color effect definitions define a rainbow of
+
 // LED color modes calibrated to draw 500mA or less on the
 // Keyboardio Model 100.
 
