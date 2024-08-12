@@ -17,7 +17,7 @@
 
 #include "kaleidoscope/plugin/FocusSerial.h"
 
-#include <Arduino.h>         // for PSTR, __FlashStringHelper, F, strcmp_P
+#include <Arduino.h>         // for PSTR, F, strcmp_P
 #include <HardwareSerial.h>  // for HardwareSerial
 #include <string.h>          // for memset
 
@@ -32,28 +32,10 @@
 namespace kaleidoscope {
 namespace plugin {
 
-bool xon = true;
-
-void FocusSerial::manageFlowControl() {
-  uint8_t avail = Runtime.serialPort().available();
-  if (xon == true) {
-    if (avail > RECV_BUFFER_THRESHOLD) {
-      Runtime.serialPort().write(XOFF);  // Send XOFF to stop data
-      xon = false;
-    }
-  } else {
-    if (avail < RECV_BUFFER_RESUME) {
-      Runtime.serialPort().write(XON);  // Send XON to resume data
-      xon = true;
-    }
-  }
-}
-
 EventHandlerResult FocusSerial::afterEachCycle() {
   int c;
   // GD32 doesn't currently autoflush the very last packet. So manually flush here
   Runtime.serialPort().flush();
-
   // If the serial buffer is empty, we don't have any work to do
   if (Runtime.serialPort().available() == 0) {
     return EventHandlerResult::OK;
@@ -95,16 +77,25 @@ EventHandlerResult FocusSerial::afterEachCycle() {
   return EventHandlerResult::OK;
 }
 
+void sendLedModeCallback_(const char *name) {
+  Runtime.serialPort().println(name);
+}
+
 EventHandlerResult FocusSerial::onFocusEvent(const char *input) {
-  const char *cmd_help    = PSTR("help");
-  const char *cmd_reset   = PSTR("device.reset");
-  const char *cmd_plugins = PSTR("plugins");
+  const char *cmd_help      = PSTR("help");
+  const char *cmd_reset     = PSTR("device.reset");
+  const char *cmd_led_modes = PSTR("led.modes");
+  const char *cmd_plugins   = PSTR("plugins");
 
   if (inputMatchesHelp(input))
-    return printHelp(cmd_help, cmd_reset, cmd_plugins);
+    return printHelp(cmd_help, cmd_reset, cmd_led_modes, cmd_plugins);
 
   if (inputMatchesCommand(input, cmd_reset)) {
     Runtime.device().rebootBootloader();
+    return EventHandlerResult::EVENT_CONSUMED;
+  }
+  if (inputMatchesCommand(input, cmd_led_modes)) {
+    kaleidoscope::Hooks::onLedEffectQuery(sendLedModeCallback_);
     return EventHandlerResult::EVENT_CONSUMED;
   }
   if (inputMatchesCommand(input, cmd_plugins)) {
@@ -114,15 +105,6 @@ EventHandlerResult FocusSerial::onFocusEvent(const char *input) {
 
   return EventHandlerResult::OK;
 }
-
-#ifndef NDEPRECATED
-bool FocusSerial::handleHelp(const char *input, const char *help_message) {
-  if (!inputMatchesHelp(input)) return false;
-
-  printHelp(help_message);
-  return true;
-}
-#endif
 
 void FocusSerial::printBool(bool b) {
   Runtime.serialPort().print((b) ? F("true") : F("false"));
