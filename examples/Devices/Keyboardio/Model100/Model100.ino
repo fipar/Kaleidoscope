@@ -410,7 +410,6 @@ const macro_t *macroAction(uint8_t macro_id, KeyEvent &event) {
   case MACRO_ANY:
     anyKeyMacro(event);
     break;
-  }
 
   case MACRO_SPOTLIGHT_SEARCH:
     return MACRO(D(LeftGui),D(Spacebar));
@@ -487,7 +486,6 @@ const macro_t *macroAction(uint8_t macro_id, KeyEvent &event) {
   case MACRO_FAKE_SUPER:
     return MACRO(D(LeftControl),D(LeftAlt),D(LeftShift),D(LeftGui));
       break;
-
   }
 
   return MACRO_NONE;
